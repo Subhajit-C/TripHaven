@@ -6,7 +6,7 @@ const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js")
 
-//method override for update and put request 
+//method override for put(update) and delete request 
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
@@ -97,6 +97,16 @@ app.put("/listings/:id", async(req, res) => {
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
     res.redirect(`/listings/${id}`);
 });
+
+
+
+//DELETE ROUTE
+app.delete("/listings/:id", async(req, res) => {
+    let { id } = req.params;
+    let deletedListing = await Listing.findByIdAndDelete(id);
+    console.log(`Deleted this listing: ${deletedListing}`);
+    res.redirect("/listings");
+})
 
 
 
