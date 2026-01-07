@@ -1,6 +1,12 @@
 .navbar{
     height: 6rem;
+    width: 100wh;
     background-color: white;
+}
+
+
+.navbar-nav{
+    gap: 3rem;
 }
 
 
