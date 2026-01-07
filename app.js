@@ -19,6 +19,12 @@ app.set("views", path.join(__dirname, "views"))
 //to use content from the url
 app.use(express.urlencoded({ extended:true }));
 
+//to use static files in public folder
+app.use(express.static(path.join(__dirname, "public")));
+
+
+const ejsMate = require("ejs-mate");
+app.engine("ejs", ejsMate);
 
 
 
