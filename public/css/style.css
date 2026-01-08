@@ -1,3 +1,10 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+
 /* NAVBAR */
 .navbar{
     height: 6rem;
@@ -22,9 +29,21 @@
     font-size: 1.25rem;
 }
 
+.container-fluid{
+    gap: 1rem;
+}
+
 
 
 /* FOOTER */
+.container{
+    height: 100vh;
+}
+
+footer{
+    width: 100%;
+}
+
 .f-info-links a{
     text-decoration: none;
     color: #222222;
@@ -39,13 +58,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 1.5rem;
 }
 
 .f-info-socials i{
     font-size: 1.2rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
 }
+
 
 .f-info{
     text-align: center;
