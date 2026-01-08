@@ -1,8 +1,13 @@
-html, body {
+/* html, body {
     height: 100vh;
     margin: 0;
     padding: 0;
+} */
+
+.container{
+    width: 100%;
 }
+
 
 
 /* NAVBAR */
@@ -36,13 +41,6 @@ html, body {
 
 
 /* FOOTER */
-.container{
-    height: 100vh;
-}
-
-footer{
-    width: 100%;
-}
 
 .f-info-links a{
     text-decoration: none;
@@ -75,3 +73,58 @@ footer{
     justify-content: center;
     align-content: space-evenly;
 }
+
+
+
+
+
+/* CARDS */
+.heading{
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.row{
+    /* gap: 1rem; */
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+.card {
+    border: none !important;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding: 0 !important;
+}
+
+.card-text p{
+    font-weight: 400;
+}
+
+
+
+/* CARD-EFFECT */
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover {
+    opacity: 0.2;
+    background-color: white;
+} 
