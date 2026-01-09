@@ -1,11 +1,13 @@
-/* html, body {
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-} */
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-.container{
-    width: 100%;
+.container-fluid{
+    flex: 1;
+    /* width: 100%; */
 }
 
 
@@ -87,11 +89,7 @@
     align-items: center;
 }
 
-.row{
-    /* gap: 1rem; */
-    margin-left: 2rem;
-    margin-right: 2rem;
-}
+
 
 .listing-link{
     text-decoration: none;
@@ -128,3 +126,12 @@
     opacity: 0.2;
     background-color: white;
 } 
+
+
+
+
+/* NEW LISTING */
+.add-btn{
+    background-color: #fe424d;
+}
+

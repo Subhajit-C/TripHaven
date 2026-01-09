@@ -4,7 +4,7 @@
         <h2>All Listings</h2>
     </div>
 
-    <div class="row gx-5 gy-2 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" style="margin-left: 2rem; margin-right: 2rem;">
         <% for(let listing of allListings) { %>
             <a href="/listings/<%= listing._id %>" class="listing-link">
             <div class="col">
