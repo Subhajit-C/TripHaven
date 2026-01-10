@@ -143,3 +143,26 @@ body{
     background-color: #fe424d;
 }
 
+
+
+
+
+/* SHOW LISTING PAGE */
+.show-img{
+    height: 30vh;
+}
+
+
+.btns{
+    display: flex;
+    justify-content: space-between;
+}
+
+.listing-title{
+    font-size: 1.5rem;
+}
+
+.back-btn{
+    background-color: grey;
+}
+

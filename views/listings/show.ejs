@@ -1,33 +1,54 @@
 <%- layout('/layouts/boilerplate') %>
-<body>
-    <h3>Listing Details: </h3>
+<div class="row mt-3">
+    <div class="col-8 offset-3">
+
+        <h3>Listing Details: </h3>
+
+    </div>
+
+
+    <div class="col-6 offset-3">
+
+        <div class="card">
+            <img src="<%= listing.image %>" class="card-img-top show-img" alt="listing_image">
+            <div class="card-body">
+                <p class="card-text">
+                    
+                    <b class="listing-title"><%= listing.title %></b>
+
+                    <br>
+
+                    <%= listing.description %>
+
+                    <br>
+
+                    <b>Price:</b> &#x20B9; <%= new Intl.NumberFormat("en-IN", {maximumFractionDigits: 0}).format(Number(listing.price)) %> / Night
+                    <!-- "Intl.NumberFormat("en-IN", {maximumFractionDigits: 0}).format(Number(listing.price))" this is the syntax to write a number in indian format(eg: 1,99,999) -->
+
+                    <br>
+
+                    <b>Location:</b> <%= listing.location %>
+
+                    <br>
+
+                    <b>Country:</b> <%= listing.country %>
+                </p>
+            </div>
+        </div>
+      
+
+        <div class="btns">
+            <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn">
+                Edit
+            </a>
+
+            <form method="post" action="/listings/<%= listing._id %>/?_method=DELETE">
+            <button class="btn btn-dark">Delete</button>
+            </form>
+
+            <a href="/listings" class="btn btn-dark back-btn">Go Back</a>
+        </div>
+
+    </div>
+</div>
     
-    <ul>
-        <li><%= listing.title %></li>
-
-        <li><%= listing.description %></li>
-
-        <li>&#x20B9; <%= new Intl.NumberFormat("en-IN", {maximumFractionDigits: 0}).format(Number(listing.price)) %></li>
-        <!-- "Intl.NumberFormat("en-IN", {maximumFractionDigits: 0}).format(Number(listing.price))" this is the syntax to write a number in indian format(eg: 1,99,999) -->
-       
-        <li><%= listing.location %></li>
-
-        <li><%= listing.country %></li>
-
-        <!-- <li><img src="<%= listing.image %>" alt="" loading="lazy"></li> -->
-
-        <br>
-
-        <a href="/listings/<%= listing._id %>/edit">Edit this Listing</a>
-
-        <br><br>
-
-        <form method="post" action="/listings/<%= listing._id %>/?_method=DELETE">
-            <button>Delete this Listing</button>
-        </form>
-
-        <br>
-
-        <a href="/listings">Go Back</a>
-    </ul>
-</body>
