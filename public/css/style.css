@@ -149,9 +149,8 @@ body{
 
 /* SHOW LISTING PAGE */
 .show-img{
-    height: 30vh;
+    height: 50vh;
 }
-
 
 .btns{
     display: flex;
