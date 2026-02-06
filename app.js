@@ -32,6 +32,9 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 
 
+//for validation of the data
+const {listingSchema} = require("./schema.js");
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -47,6 +50,26 @@ main().then(() => {
 async function main(){
     await mongoose.connect(MONGO_URL);
 }
+
+
+
+
+
+app.get("/", (req, res) => {
+    res.send("working");
+})
+
+
+
+
+const validateListing = (req, res, next) => {
+    let {error} = listingSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }
+    next();
+};
 
 
 
@@ -81,19 +104,42 @@ app.get("/listings/:id",  wrapAsync(async(req, res) => {
 }));
 
 
+
 //CREATE ROUTE: sends post request and update the db
-app.post("/listings", wrapAsync(async(req, res, next) => {
+app.post("/listings", validateListing, wrapAsync(async(req, res, next) => {
     // wrapAsync is a helper function used in Express apps to handle errors from async/await routes cleanly.
     // It saves you from writing try–catch blocks again and again.
 
-    if(!req.body.listing){
-        throw new ExpressError(400, "Send valid data for listing");
-    }
+
+    // if(!req.body.listing){
+    //     throw new ExpressError(400, "Send valid data for listing");
+    // }
+    // //not required now because we are using schema validation using joi.
+
+
+    // //earising this because we are making it in a function of middleware for best practice
+    // let result = listingSchema.validate(req.body);
+    // if(result.error){
+    //     throw new ExpressError(400, result.error);
+    // }
 
 
     // let { title, description, image, price, location, country } = req.body;
     //made some changes in new.ejs so that it returns an object "listing" containing all the things and we can access it with req.body
-    let newListing = new Listing(req.body.listing);
+    const newListing = new Listing(req.body.listing);
+
+
+
+
+    // //we are doing this even though we have validated the frontend field as required because their are more ways to send a req to the server which doesnt goes through the frontend ie to bypass frontend
+    // if(!newListing.title) throw ExpressError(400, "Title is missing!");
+    // if(!newListing.description) throw ExpressError(400, "Description is missing!");
+    // if(!newListing.location) throw ExpressError(400, "Location is missing!");
+    // //if all the above condition comes true then only the listiong will get saved in the db.
+    // // Not preferred: this logic must be repeated in every API route 
+    // // Preferred approach: use centralized schema validation (e.g., Joi/Mongoose) to avoid duplicate checks across routes
+    
+
     await newListing.save();
     res.redirect("/listings");
 }));
@@ -165,14 +211,6 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render("error.ejs", { err });
 })
 
-
-
-
-
-
-app.get("/", (req, res) => {
-    res.send("working");
-})
 
 
 
