@@ -29,6 +29,7 @@ app.engine("ejs", ejsMate);
 
 //for errors using wrapAsync
 const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js");
 
 
 
@@ -52,10 +53,10 @@ async function main(){
 
 
 //INDEX ROUTE: Home route where the content is shown. 
-app.get("/listings", async (req, res) => {
+app.get("/listings",  wrapAsync(async (req, res) => {
     const allListings = await Listing.find({});
     res.render("listings/index.ejs" , { allListings });
-})
+}));
 
 
 
@@ -72,19 +73,23 @@ app.get("/listings/new", (req, res) => {
 
 
 //SHOW ROUTE: where the details of the content will be show individually
-app.get("/listings/:id", async(req, res) => {
+app.get("/listings/:id",  wrapAsync(async(req, res) => {
     let {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/show.ejs", { listing });
 
-});
+}));
 
 
 //CREATE ROUTE: sends post request and update the db
 app.post("/listings", wrapAsync(async(req, res, next) => {
     // wrapAsync is a helper function used in Express apps to handle errors from async/await routes cleanly.
     // It saves you from writing try–catch blocks again and again.
-    
+
+    if(!req.body.listing){
+        throw new ExpressError(400, "Send valid data for listing");
+    }
+
 
     // let { title, description, image, price, location, country } = req.body;
     //made some changes in new.ejs so that it returns an object "listing" containing all the things and we can access it with req.body
@@ -97,30 +102,34 @@ app.post("/listings", wrapAsync(async(req, res, next) => {
 
 
 //EDIT ROUTE
-app.get("/listings/:id/edit", async(req, res) => { 
+app.get("/listings/:id/edit",  wrapAsync(async(req, res) => { 
     let { id } = req.params;
     const listing = await Listing.findById(id); 
     res.render("listings/edit.ejs", { listing });
-});
+}));
 
 
 
 //UPDATE ROUTE
-app.put("/listings/:id", async(req, res) => {
+app.put("/listings/:id",  wrapAsync(async(req, res) => {
+    if(!req.body.listing){
+        throw new ExpressError(400, "Send valid data for listing");
+    }
+    
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
     res.redirect(`/listings/${id}`);
-});
+}));
 
 
 
 //DELETE ROUTE
-app.delete("/listings/:id", async(req, res) => {
+app.delete("/listings/:id",  wrapAsync(async(req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(`Deleted this listing: ${deletedListing}`);
     res.redirect("/listings");
-})
+}));
 
 
 
@@ -142,10 +151,18 @@ app.delete("/listings/:id", async(req, res) => {
 
 
 
+// Catch-all middleware: runs when no route matches and forwards a 404 error
+app.use((req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+});
 
-//MIDDLEWARE for error handing for asynchronous process: to handle server internal error
+
+
+
+// Global error-handling middleware: catches all errors (sync + async) and sends a response
 app.use((err, req, res, next) => {
-    res.send("something went wrong");
+    let { statusCode = 500, message = "Something went worng!" } = err;
+    res.status(statusCode).send(message);
 })
 
 
