@@ -27,6 +27,10 @@ const ejsMate = require("ejs-mate");
 app.engine("ejs", ejsMate);
 
 
+//for errors using wrapAsync
+const wrapAsync = require("./utils/wrapAsync.js");
+
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -77,13 +81,17 @@ app.get("/listings/:id", async(req, res) => {
 
 
 //CREATE ROUTE: sends post request and update the db
-app.post("/listings", async(req, res) => {
+app.post("/listings", wrapAsync(async(req, res, next) => {
+    // wrapAsync is a helper function used in Express apps to handle errors from async/await routes cleanly.
+    // It saves you from writing try–catch blocks again and again.
+    
+
     // let { title, description, image, price, location, country } = req.body;
     //made some changes in new.ejs so that it returns an object "listing" containing all the things and we can access it with req.body
     let newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
-});
+}));
 
 
 
@@ -91,7 +99,7 @@ app.post("/listings", async(req, res) => {
 //EDIT ROUTE
 app.get("/listings/:id/edit", async(req, res) => { 
     let { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id); 
     res.render("listings/edit.ejs", { listing });
 });
 
@@ -131,6 +139,14 @@ app.delete("/listings/:id", async(req, res) => {
 //     console.log("sample was saved");
 //     res.send("successful testing");
 // });
+
+
+
+
+//MIDDLEWARE for error handing for asynchronous process: to handle server internal error
+app.use((err, req, res, next) => {
+    res.send("something went wrong");
+})
 
 
 
