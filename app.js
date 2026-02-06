@@ -153,7 +153,7 @@ app.delete("/listings/:id",  wrapAsync(async(req, res) => {
 
 // Catch-all middleware: runs when no route matches and forwards a 404 error
 app.use((req, res, next) => {
-    next(new ExpressError(404, "Page Not Found"));
+    next(new ExpressError(404, "Page Not Found!"));
 });
 
 
@@ -162,7 +162,7 @@ app.use((req, res, next) => {
 // Global error-handling middleware: catches all errors (sync + async) and sends a response
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went worng!" } = err;
-    res.status(statusCode).send(message);
+    res.status(statusCode).render("error.ejs", { err });
 })
 
 
