@@ -289,6 +289,16 @@ const sampleListings = [
     location: "Costa Rica",
     country: "Costa Rica",
   },
+  {
+    title: "Manas Aradhana Apartment",
+    description:
+      "Situatited new Hope Hospital.",
+    image:
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
+    price: 1500,
+    location: "Nagpur",
+    country: "India",
+  }
 ];
 
 module.exports = { data: sampleListings };
