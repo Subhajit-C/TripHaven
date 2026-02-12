@@ -15,8 +15,8 @@ body{
 /* NAVBAR */
 .navbar{
     height: 6rem;
-    width: 100wh;
-    background-color: white;
+    width: 100%;
+    /* background-color: rgb(145, 143, 143); */
 }
 
 
@@ -39,6 +39,21 @@ body{
 .container-fluid{
     gap: 1rem;
 }
+
+
+.custom-navbar {
+  background-color: #ebebeb; /* solid initially */
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+/* After scroll */
+.custom-navbar.scrolled {
+  background-color: rgba(235, 235, 235, 0.85); /* translucent but visible */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+
 
 
 

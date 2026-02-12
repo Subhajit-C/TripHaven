@@ -17,3 +17,16 @@
     }, false)
   })
 })()
+
+
+
+
+
+// Toggle translucent navbar on scroll
+const navbar = document.querySelector('.custom-navbar');
+
+if (navbar) {
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 10);
+  });
+}
