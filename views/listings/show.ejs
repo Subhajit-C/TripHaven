@@ -50,7 +50,7 @@
         <hr>
         <h4><b>Leave a Review</b></h4>
 
-        <form action="/listings/<%= listing.id %>/reviews" method="post">
+        <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation">
             <div class="mb-3 mt-3">
                 <label for="rating" class="form-label">
                     Rating: <span id="ratingValue">3</span> ⭐
@@ -62,7 +62,8 @@
             <div  class="mb-3 mt-3">
                 <label for="comment" class="form-label">Comments</label>
                 <br>
-                <textarea name="review[comment]" id="comment" cols="113" rows="5" class="form-control" placeholder="Write Something"></textarea>
+                <textarea name="review[comment]" id="comment" cols="113" rows="5" class="form-control" placeholder="Write Something" required></textarea>
+                <div class="invalid-feedback">Please add some comments for review</div>
             </div>
 
             <div class="d-flex justify-content-end">

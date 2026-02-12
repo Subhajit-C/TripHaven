@@ -34,7 +34,7 @@ const ExpressError = require("./utils/ExpressError.js");
 
 
 //for validation of the data
-const {listingSchema} = require("./schema.js");
+const {listingSchema, reviewSchema} = require("./schema.js");
 
 
 const PORT = process.env.PORT || 8080;
@@ -71,6 +71,15 @@ const validateListing = (req, res, next) => {
     }
     next();
 };
+
+const validateReview = (req, res, next) => {
+    let {error} = reviewSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }
+    next();
+}
 
 
 
@@ -118,7 +127,7 @@ app.post("/listings", validateListing, wrapAsync(async(req, res, next) => {
     // //not required now because we are using schema validation using joi.
 
 
-    // //earising this because we are making it in a function of middleware for best practice
+    // //earasing this because we are making it in a function of middleware for best practice
     // let result = listingSchema.validate(req.body);
     // if(result.error){
     //     throw new ExpressError(400, result.error);
@@ -149,7 +158,7 @@ app.post("/listings", validateListing, wrapAsync(async(req, res, next) => {
 
 
 //EDIT ROUTE
-app.get("/listings/:id/edit",  wrapAsync(async(req, res) => { 
+app.get("/listings/:id/edit", wrapAsync(async(req, res) => { 
     let { id } = req.params;
     const listing = await Listing.findById(id); 
     res.render("listings/edit.ejs", { listing });
@@ -158,7 +167,7 @@ app.get("/listings/:id/edit",  wrapAsync(async(req, res) => {
 
 
 //UPDATE ROUTE
-app.put("/listings/:id",  wrapAsync(async(req, res) => {
+app.put("/listings/:id", validateListing, wrapAsync(async(req, res, next) => {
     if(!req.body.listing){
         throw new ExpressError(400, "Send valid data for listing");
     }
@@ -183,9 +192,13 @@ app.delete("/listings/:id",  wrapAsync(async(req, res) => {
 
 
 
+
+
+
 //REVIEWS
+
 //Post Route
-app.post("/listings/:id/reviews", async(req, res) => {
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
 
@@ -194,10 +207,10 @@ app.post("/listings/:id/reviews", async(req, res) => {
 
     //then saving both newReview and the listing in the database respectively in their own collections
     await newReview.save();
-    await listing.save();
+    await listing.save();     
 
     res.redirect(`/listings/${listing._id}`);
-});
+}));
 
 
 
