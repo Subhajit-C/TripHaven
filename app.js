@@ -4,7 +4,8 @@ require("dotenv").config({ quiet: true });
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js")
+const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 
 //method override for put(update) and delete request 
 const methodOverride = require("method-override");
@@ -176,6 +177,27 @@ app.delete("/listings/:id",  wrapAsync(async(req, res) => {
     console.log(`Deleted this listing: ${deletedListing}`);
     res.redirect("/listings");
 }));
+
+
+
+
+
+
+//REVIEWS
+//Post Route
+app.post("/listings/:id/reviews", async(req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    //add the new review id to the "reviews" array in the listing document
+    listing.reviews.push(newReview);
+
+    //then saving both newReview and the listing in the database respectively in their own collections
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listings/${listing._id}`);
+});
 
 
 
