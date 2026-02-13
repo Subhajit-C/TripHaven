@@ -71,6 +71,15 @@
             </div>
 
         </form>
+
+        <hr>
+
+        <h4><b>All Reviews</b></h4>
+        <ul>
+            <% for(let review of listing.reviews){ %>
+                <li><%= review.comment %>, <%= review.rating %> ⭐</li>
+            <% } %>
+        </ul>
     </div>
 </div>
     
