@@ -9,7 +9,7 @@
 
     <div class="col-6 offset-3">
 
-        <div class="card">
+        <div class="card listing-card">
             <img src="<%= listing.image %>" class="card-img-top show-img" alt="listing_image">
             <div class="card-body">
                 <p class="card-text">
@@ -75,11 +75,19 @@
         <hr>
 
         <h4><b>All Reviews</b></h4>
-        <ul>
+        
+        <div class="row">
             <% for(let review of listing.reviews){ %>
-                <li><%= review.comment %>, <%= review.rating %> ⭐</li>
+            <div class="card col-5 ms-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Subhajit Chakraborty</h5>
+                    <p class="card-text"><%= review.comment %></p>
+                    <p class="card-text"><%= review.rating %> ⭐</p>
+                </div>
+             </div>
             <% } %>
-        </ul>
+        </div>
+        
     </div>
 </div>
     
