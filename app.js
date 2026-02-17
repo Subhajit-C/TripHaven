@@ -4,8 +4,6 @@ require("dotenv").config({ quiet: true });
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js");
-const Review = require("./models/review.js");
 
 //method override for put(update) and delete request 
 const methodOverride = require("method-override");
@@ -28,15 +26,12 @@ const ejsMate = require("ejs-mate");
 app.engine("ejs", ejsMate);
 
 
-//for errors using wrapAsync
-const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 
 
-//for validation of the data
-const {listingSchema, reviewSchema} = require("./schema.js");
-
+//for routers
 const listings = require("./routes/listings.js");
+const reviews = require("./routes/review.js");
 
 
 const PORT = process.env.PORT || 8080;
@@ -57,59 +52,19 @@ async function main(){
 
 
 
-
 app.get("/", (req, res) => {
     res.send("working");
 })
 
-
-
-
-const validateReview = (req, res, next) => {
-    let {error} = reviewSchema.validate(req.body);
-    if(error){
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    }
-    next();
-}
  
 
 
-
+//for listing routes
 app.use("/listings", listings);
 
 
-
-
-//REVIEWS
-
-//Post Reviews Route
-app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-
-    //add the new review id to the "reviews" array in the listing document
-    listing.reviews.push(newReview);
-
-    //then saving both newReview and the listing in the database respectively in their own collections
-    await newReview.save();
-    await listing.save();     
-
-    res.redirect(`/listings/${listing._id}`);
-}));
-
-
-
-
-//Delete Review Route
-app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async(req,res) => {
-    let { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
-    await Review.findByIdAndDelete(reviewId);
- 
-    res.redirect(`/listings/${id}`);
-}));
+//for review routes
+app.use("/listings/:id/reviews", reviews)
 
 
 
@@ -144,9 +99,6 @@ app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went worng!" } = err;
     res.status(statusCode).render("error.ejs", { err });
 })
-
-
-
 
 
 
